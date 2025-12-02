@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Connection to MetaMask</title>
+
+<style>
+body {
+    background-color: cadetblue;
+    font-size: 33px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+    background-color: turquoise;
+    font-size: 28px;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: peru;
+}
+
+p {
+    font-size: 25px;
+}
+</style>
+
+</head>
+<body>
+
+<h1>Connect to MetaMask</h1>
+
+<button onclick="ConnectMetaMask()">Connect to MetaMask</button><br>
+
+<button onclick="PersonalAcc()">Personal Account</button><br>
+<p id="accountArea"></p>
+
+<button onclick="BusinessAcc()">Business Account</button><br>
+<p id="accountArea2"></p>
+
+<button onclick="CorpoAcc()">Corporate Account</button><br>
+<p id="accountArea3"></p>
+
+
+<script>
+let accounts = [];
+
+
+const ConnectMetaMask = async () => {
+    if (typeof window.ethereum !== "undefined") {
+        try {
+            accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+            alert("Connected to MetaMask: " + accounts[0]);
+        } catch (error) {
+            console.error("Error connecting to MetaMask", error);
+        }
+    } else {
+        alert("MetaMask is not installed.");
+    }
+};
+
+
+
+const PersonalAcc = async () => {
+    try {
+        const activeAccount = await window.ethereum.request({ method: "eth_accounts" });
+
+        if (activeAccount.length > 0) {
+            document.getElementById("accountArea").innerHTML = `Active Personal Account: ${activeAccount[0]}`;
+        } else {
+            alert("Please connect to MetaMask first.");
+        }
+    } catch (error) {
+        console.error("Error fetching personal account", error);
+    }
+};
+
+
+
+const BusinessAcc = () => {
+    if (accounts.length > 1) {
+        document.getElementById("accountArea2").innerHTML = `Business Account: ${accounts[1]}`;
+    } else {
+        alert("No second account available or connect MetaMask first.");
+    }
+};
+
+
+
+const CorpoAcc = () => {
+    if (accounts.length > 2) {
+        document.getElementById("accountArea3").innerHTML = `Corporate Account: ${accounts[2]}`;
+    } else {
+        alert("No third account available or connect MetaMask first.");
+    }
+};
+</script>
+
+</body>
+</html>
